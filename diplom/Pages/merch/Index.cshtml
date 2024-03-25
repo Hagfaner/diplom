@@ -1,0 +1,49 @@
+﻿@page
+@model diplom.Pages.merch.IndexModel
+@using diplom.Models;
+@using diplom.Data;
+@{
+    ViewData["Title"] = "Список товаров";
+    
+}
+
+<h1>Товары</h1>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<p>
+    @if (User.IsInRole("admin"))
+    {
+        
+    <a asp-page="Create">Добавить товар</a>
+    }
+</p>
+<tbody>
+        <div class="row">       
+@foreach (var item in Model.Material) {
+
+            <div class="col-sm-4">
+                <div class="card">
+                    <img src="/pics/@item.Id.ToString()_.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Discription</p>
+                        <p class="card-text">@item.Price.ToString() руб.</p>
+                        <a href="#" class="btn btn-primary">В корзину</a>
+                        @if (User.IsInRole("admin")){
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-primary" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
+                           
+                        }
+                    </div>
+
+                       
+                       
+                </div>
+            </div>
+       
+}
+       </div>
+      
+        
+</tbody>
