@@ -8,39 +8,36 @@ using Microsoft.EntityFrameworkCore;
 using diplom.Data;
 using diplom.Models;
 
-namespace diplom.Pages.merch
+namespace diplom.Pages.basket
 {
     public class DeleteModel : PageModel
     {
         private readonly diplom.Data.diplomContext _context;
-       
 
         public DeleteModel(diplom.Data.diplomContext context)
         {
             _context = context;
-
         }
 
         [BindProperty]
-        public Material Material { get; set; } = default!;
+        public Basket Basket { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (!User.IsInRole("admin")) return RedirectToPage("./Index");
             if (id == null)
             {
                 return NotFound();
             }
 
-            var material = await _context.Material.FirstOrDefaultAsync(m => m.Id == id);
+            var basket = await _context.Basket.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
+            if (basket == null)
             {
                 return NotFound();
             }
             else
             {
-                Material = material;
+                Basket = basket;
             }
             return Page();
         }
@@ -52,11 +49,11 @@ namespace diplom.Pages.merch
                 return NotFound();
             }
 
-            var material = await _context.Material.FindAsync(id);
-            if (material != null)
+            var basket = await _context.Basket.FindAsync(id);
+            if (basket != null)
             {
-                Material = material;
-                _context.Material.Remove(Material);
+                Basket = basket;
+                _context.Basket.Remove(Basket);
                 await _context.SaveChangesAsync();
             }
 

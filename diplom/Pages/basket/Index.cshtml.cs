@@ -9,49 +9,55 @@ using diplom.Data;
 using diplom.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 
-namespace diplom.Pages.merch
+namespace diplom.Pages.basket
 {
     [Authorize]
-    [IgnoreAntiforgeryToken]
     public class IndexModel : PageModel
     {
-        private readonly diplom.Data.diplomContext _context;
+        public readonly diplom.Data.diplomContext _context;
         private readonly UserManager<User> userManager;
         public User? user;
-
+        public IList<Material> Material { get; set; } = default!;
         public IndexModel(diplom.Data.diplomContext context, UserManager<User> userManager)
         {
             this.userManager = userManager;
             _context = context;
         }
 
-        public IList<Material> Material { get;set; } = default!;
+        public IList<Basket> Basket { get; set; } = default!;
 
-        
+        [BindProperty]
+        public Basket basket_buf { get; set; } = default!;
+     
+
         public async Task OnGetAsync()
         {
+            Basket = await _context.Basket.ToListAsync();
             var task = userManager.GetUserAsync(User);
             task.Wait();
             user = task.Result;
-            Material = await _context.Material.ToListAsync();
         }
-        [BindProperty]
-        public Basket Basket { get; set; } = default!;
-        public async Task<IActionResult> OnPostAsync()
+        
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (_context.Basket.Where(c => c.Id_material == Basket.Id_material && c.Id_user == Basket.Id_user).Any())
+            if (id == null)
             {
-                _context.Basket.First(c => c.Id_material == Basket.Id_material && c.Id_user == Basket.Id_user).Count++;
+                return NotFound();
             }
-            else
-            {
-            Basket.Count ++;
-            _context.Basket.Add(Basket);
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToPage("./Index");
 
+            var basket = await _context.Basket.FindAsync(id);
+            if (basket != null)
+            {
+                basket_buf = basket;
+                _context.Basket.Remove(basket_buf);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage("./Index");
         }
     }
 }

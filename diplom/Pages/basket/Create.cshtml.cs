@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using diplom.Data;
 using diplom.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace diplom.Pages.merch
+namespace diplom.Pages.basket
 {
     public class CreateModel : PageModel
     {
@@ -22,12 +21,11 @@ namespace diplom.Pages.merch
 
         public IActionResult OnGet()
         {
-            if (!User.IsInRole("admin")) return RedirectToPage("./Index");
             return Page();
         }
 
         [BindProperty]
-        public Material Material { get; set; } = default!;
+        public Basket Basket { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -37,12 +35,10 @@ namespace diplom.Pages.merch
                 return Page();
             }
 
-            _context.Material.Add(Material);
+            _context.Basket.Add(Basket);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
-       
-       
     }
 }

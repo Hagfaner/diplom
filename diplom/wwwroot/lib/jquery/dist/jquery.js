@@ -4400,7 +4400,10 @@ var dataUser = new Data();
 //	6. Provide a clear path for implementation upgrade to WeakMap in 2014
 
 var rbrace = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
-	rmultiDash = /[A-Z]/g;
+		rmultiDash = /[
+	
+		
+		]/g;
 
 function getData( data ) {
 	if ( data === "true" ) {
