@@ -3,15 +3,17 @@ using Microsoft.Extensions.DependencyInjection;
 using diplom.Data;
 using Microsoft.AspNetCore.Identity;
 using diplom.Models;
+using diplom;
+using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<diplomContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("diplomContext") ?? throw new InvalidOperationException("Connection string 'diplomContext' not found.")));
-
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<diplomContext>();
+    .AddEntityFrameworkStores<diplomContext>()
+    .AddErrorDescriber<AppErrorDescriber>();
 
 var app = builder.Build();
 

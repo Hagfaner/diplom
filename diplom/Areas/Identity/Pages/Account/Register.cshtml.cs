@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace diplom.Areas.Identity.Pages.Account
 {
+    
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -71,16 +72,19 @@ namespace diplom.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            public string Firstname { get; set; }      
-            [Required]
-            public string Lastname { get; set; }
+            //[Required]
+            //public string Firstname { get; set; }      
+            //[Required]
+            //public string Lastname { get; set; }
+            [Required(ErrorMessage = "Обязательное поле")]
+            [Display(Name = "Логин")]
+            public string UserName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Обязательное поле")]
+            [EmailAddress(ErrorMessage = "Введите корректный email адрес")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -88,8 +92,8 @@ namespace diplom.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Обязательное поле")]
+            [StringLength(100, ErrorMessage = "{0} должен быть от {2} и до {1} символов в длину.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -100,7 +104,7 @@ namespace diplom.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Пароли не совпадают.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -120,10 +124,10 @@ namespace diplom.Areas.Identity.Pages.Account
                 //var user = CreateUser();
                 var user = new User()
                 {
-                    Firstname = Input.Firstname,
-                    Lastname = Input.Lastname
+                    Firstname = "", //Input.Firstname,
+                    Lastname ="" //Input.Lastname
                 };
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -158,6 +162,7 @@ namespace diplom.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
+                    
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }

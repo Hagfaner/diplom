@@ -8,38 +8,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using diplom.Data;
 using diplom.Models;
-using Microsoft.AspNetCore.Identity;
 
-namespace diplom.Pages.merch
+namespace diplom.Pages.basket
 {
     public class EditModel : PageModel
     {
         private readonly diplom.Data.diplomContext _context;
-        
+
         public EditModel(diplom.Data.diplomContext context)
         {
             _context = context;
-            
         }
 
         [BindProperty]
-        public Material Material { get; set; } = default!;
+        public Basket Basket { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (!User.IsInRole("admin")) return RedirectToPage("./Index");
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var material =  await _context.Material.FirstOrDefaultAsync(m => m.Id == id);
-            if (material == null)
+            var basket =  await _context.Basket.FirstOrDefaultAsync(m => m.Id == id);
+            if (basket == null)
             {
                 return NotFound();
             }
-            Material = material;
+            Basket = basket;
             return Page();
         }
 
@@ -52,7 +48,7 @@ namespace diplom.Pages.merch
                 return Page();
             }
 
-            _context.Attach(Material).State = EntityState.Modified;
+            _context.Attach(Basket).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +56,7 @@ namespace diplom.Pages.merch
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MaterialExists(Material.Id))
+                if (!BasketExists(Basket.Id))
                 {
                     return NotFound();
                 }
@@ -73,9 +69,9 @@ namespace diplom.Pages.merch
             return RedirectToPage("./Index");
         }
 
-        private bool MaterialExists(int id)
+        private bool BasketExists(int id)
         {
-            return _context.Material.Any(e => e.Id == id);
+            return _context.Basket.Any(e => e.Id == id);
         }
     }
 }

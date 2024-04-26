@@ -8,12 +8,11 @@
 }
 
 <h1>Товары</h1>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <p>
     @if (User.IsInRole("admin"))
     {
-        
-    <a asp-page="Create">Добавить товар</a>
+
+        <a asp-area="" asp-page="/Create" class="btn btn-outline-primary">Добавить товар</a>
     }
 </p>
 <tbody>
@@ -21,13 +20,19 @@
 @foreach (var item in Model.Material) {
 
             <div class="col-sm-4">
-                <div class="card">
-                    <img src="/pics/@item.Id.ToString()_.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">@item.Discription</p>
+                <div class="card" style="height:700px;">
+                    <img class="img-fluid" src="/pics/@item.Id.ToString()_.png" class="card-img-top" alt="404.png">
+                    <div class="card-body" >
+                        <h5 class="card-title" style="height:75px;">@item.Name</h5>
+                        <p class="card-text" style="height:90px;">@item.Discription</p>
                         <p class="card-text">@item.Price.ToString() руб.</p>
-                        <a href="#" class="btn btn-primary">В корзину</a>
+                        <form method="post">
+
+                            <input asp-for="Basket.Id_material" value="@item.Id" type="hidden" />
+                            <input asp-for="Basket.Id_user" value="@Model.user?.Email" type="hidden" />
+                            <input type="submit" value="В корзину" class="btn btn-primary" />
+
+                        </form>
                         @if (User.IsInRole("admin")){
                             <div class="btn-group" role="group">
                                 <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
@@ -35,6 +40,8 @@
                             </div>
                            
                         }
+                       
+                    
                     </div>
 
                        

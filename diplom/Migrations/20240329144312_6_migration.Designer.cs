@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using diplom.Data;
 
@@ -11,9 +12,11 @@ using diplom.Data;
 namespace diplom.Migrations
 {
     [DbContext(typeof(diplomContext))]
-    partial class diplomContextModelSnapshot : ModelSnapshot
+    [Migration("20240329144312_6_migration")]
+    partial class _6_migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace diplom.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b498dd4d-300d-4884-a468-aa87414ec2a3",
+                            Id = "0ced7383-e973-42f2-910b-a2041016c430",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "30baa9c7-9fdc-4b07-aa8b-3d5b0a7cd5f5",
+                            Id = "7abca980-29e8-45be-abfe-c882186bf589",
                             Name = "user",
                             NormalizedName = "user"
                         });

@@ -1,0 +1,72 @@
+﻿@page
+@model diplom.Pages.basket.IndexModel
+
+@{
+    ViewData["Title"] = "Корзина";
+    string str = "";
+}
+
+<h1>Корзина</h1>
+<div class="row row-cols-2">
+<p class="col-xl-6" style="font-size:18px;" id="showbox"></p>
+    <input type="submit" class="btn btn-primary col-xl-4" value="Оплатить"/>
+</div>
+<div style="height:40px;"></div>
+<script src="/js/InputUpdate.js">
+</script>
+@foreach(var item in @Model.Basket.Where(c => c.Id_user == @Model.user?.Email)) {
+        <div class="card mb-2" style="max-width: 1000px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+                <img class="img-fluid" src="/pics/@Model._context.Material.First(d => d.Id == item.Id_material).Id.ToString()_.png" alt="item.Name"  class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                    <h5 class="card-title">@Model._context.Material.First(d => d.Id == item.Id_material).Name.ToString()</h5>
+                    <p class="card-text"> @Model._context.Material.First(d => d.Id == item.Id_material).Price.ToString() руб</p>
+                   <p class="card-text">
+
+                        <form method="post">
+                            @{
+                                str = item.Id.ToString()+"." + Model._context.Material.First(d => d.Id == item.Id_material).Price.ToString();
+                            }
+                            
+                            <input style="max-width: 70px;" id="@str" type="number" name="box" asp-for="@item.Count" class="form-control" value="@item.Count" />
+                      
+                            <input type="hidden" asp-for="@item.Id"/>
+                            <input type="submit" value="Удалить" class="btn btn-danger" asp-route-id="@item.Id" />
+                        </form>
+                          
+                   </p>
+                   
+                  
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    @*  {sum+= Model._context.Material.First(d => d.Id == item.Id_material).Price * @item.Count;} *@
+
+   
+
+}
+        
+
+
+
+<script>
+    var s = 0;
+    var inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(function (input) {
+        var inputElement = document.getElementById(input.id);
+        if (localStorage.getItem(input.id) != null){
+            inputElement.value = localStorage.getItem(input.id);
+        }
+       
+       
+        var price = input.id.slice(input.id.indexOf(".") + 1);
+        s += input.value * price;
+    });
+    document.getElementById('showbox').textContent ="Итоговая сумма к оплате: "+ s+ " руб.";
+</script>
