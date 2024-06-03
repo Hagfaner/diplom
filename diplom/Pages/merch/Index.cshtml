@@ -12,7 +12,7 @@
     @if (User.IsInRole("admin"))
     {
 
-        <a asp-area="" asp-page="/Create" class="btn btn-outline-primary">Добавить товар</a>
+        <a asp-area="" asp-page="/merch/Create" class="btn btn-outline-primary">Добавить товар</a>
     }
 </p>
 <tbody>
@@ -35,8 +35,8 @@
                         </form>
                         @if (User.IsInRole("admin")){
                             <div class="btn-group" role="group">
-                                <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
-                                <a class="btn btn-primary" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                                <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@item.Id">Изменить</a>
+                                <a class="btn btn-primary" asp-page="./Delete" asp-route-id="@item.Id">Удалить</a>
                             </div>
                            
                         }
